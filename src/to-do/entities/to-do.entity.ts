@@ -1,7 +1,7 @@
 import { arrayBuffer } from "stream/consumers";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'toDo'})
+@Entity({ name: 'todo'})
 export class ToDo {
 
     @PrimaryGeneratedColumn('uuid')
@@ -13,7 +13,9 @@ export class ToDo {
     @Column('text')
     description: string;
 
-    @Column('date')
+    @CreateDateColumn({
+        update: false,
+    })
     createdAt: Date;
 
     @Column('date')

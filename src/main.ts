@@ -1,9 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
-async function bootstrap() {
+async function main() {
   const app = await NestFactory.create(AppModule);
+  const logger = new Logger(
+    'App Running'
+  )
   // Defino el nombre a la ruta
   app.setGlobalPrefix('api');
 
@@ -15,6 +18,7 @@ async function bootstrap() {
     })
   )
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
+  logger.log(`the App is running on port ${process.env.PORT}`)
 }
-bootstrap();
+main();
