@@ -29,5 +29,5 @@ export class ToDo {
     @Column('text', {
         array: true
     })
-    label: string[];
+    tags: string[];
 }
