@@ -3,7 +3,7 @@ import { ToDoService } from './to-do.service';
 import { CreateToDoDto } from './dto/create-to-do.dto';
 import { UpdateToDoDto } from './dto/update-to-do.dto';
 
-@Controller('to-do')
+@Controller('todo')
 export class ToDoController {
   constructor(private readonly toDoService: ToDoService) {}
 
