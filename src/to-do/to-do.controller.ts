@@ -7,16 +7,26 @@ import { UpdateToDoDto } from './dto/update-to-do.dto';
 export class ToDoController {
   constructor(private readonly toDoService: ToDoService) {}
 
+  // Crea un toDo
   @Post()
   create(@Body() createToDoDto: CreateToDoDto) {
     return this.toDoService.create(createToDoDto);
   }
 
+  // Busca los toDos activos o archivados
   @Get()
-  findAll(@Query('todoActive', ParseBoolPipe) todoActive: boolean) {
-    return this.toDoService.findAll(todoActive);
+  findActive(@Query('todoActive', ParseBoolPipe) todoActive: boolean) {
+    return this.toDoService.findActiveTodos(todoActive);
   }
 
+  // Busca los toDos de hoy o los proximos
+
+  @Get()
+  findToday(@Query('todoToday', ParseBoolPipe) todoToday: boolean) {
+    return this.toDoService.findTodayTodos(todoToday)
+  }
+
+  // Busca un toDo para ser editado o visto
   @Get(':searchValue')
   findOne(@Param('searchValue') searchValue: string) {
     return this.toDoService.findOne(searchValue);

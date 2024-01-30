@@ -1,5 +1,5 @@
 import { arrayBuffer } from "stream/consumers";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'todo'})
 export class ToDo {
@@ -28,4 +28,10 @@ export class ToDo {
         array: true
     })
     tags: string[];
+
+    @BeforeInsert()
+    dateConvesion() {
+        this.createdAt.getDate();
+    }
+    
 }
