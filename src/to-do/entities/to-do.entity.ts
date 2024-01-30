@@ -13,9 +13,6 @@ export class ToDo {
     @Column('text')
     description: string;
 
-    @CreateDateColumn({ name: 'createdAt' })
-    createdAt: Date;
-
     @Column('date')
     dueDate: Date;
 
@@ -28,10 +25,5 @@ export class ToDo {
         array: true
     })
     tags: string[];
-
-    @BeforeInsert()
-    dateConvesion() {
-        this.createdAt.getDate();
-    }
     
 }

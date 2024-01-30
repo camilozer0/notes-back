@@ -3,7 +3,6 @@ import { ToDoModule } from './to-do/to-do.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ToDo } from './to-do/entities/to-do.entity';
-import { CommonModule } from './common/common/common.module';
 import { CommonModule } from './common/common.module';
 
 @Module({
