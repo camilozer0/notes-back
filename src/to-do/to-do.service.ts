@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateToDoDto } from './dto/create-to-do.dto';
 import { UpdateToDoDto } from './dto/update-to-do.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,6 +20,7 @@ export class ToDoService {
       return toDo;
     } catch (error) {
       console.log(error);
+      throw new InternalServerErrorException('Help')
     }
   }
 
