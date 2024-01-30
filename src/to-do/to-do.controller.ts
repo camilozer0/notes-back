@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe, Query, DefaultValuePipe } from '@nestjs/common';
 import { ToDoService } from './to-do.service';
-import { CreateToDoDto } from './dto/create-to-do.dto';
-import { UpdateToDoDto } from './dto/update-to-do.dto';
+import { CreateToDoDto, UpdateToDoDto, FiltersDto } from './dto';
 
 @Controller('todo')
 export class ToDoController {
@@ -26,11 +25,10 @@ export class ToDoController {
   // }
 
   @Get()
-  findToDos(
-    @Query('todoActive', ParseBoolPipe, new DefaultValuePipe(true)) todoActive: boolean,
-    @Query('todoToday', ParseBoolPipe) todoToday: boolean,
-  ) {
-    return this.toDoService.findTodayTodos(todoActive, todoToday)
+  findwithFilters(
+    @Query() filtersDto: FiltersDto ) {
+      console.log(filtersDto)
+    return this.toDoService.findtodosWithFilters(filtersDto)
   }
 
   // Busca un toDo para ser editado o visto
