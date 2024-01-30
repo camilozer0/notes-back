@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsArray, IsBoolean, IsBooleanString, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength, MinDate, MinLength, isDateString } from "class-validator";
+import { IsArray, IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength, MinDate, MinLength, isDateString } from "class-validator";
 
 export class CreateToDoDto {
 

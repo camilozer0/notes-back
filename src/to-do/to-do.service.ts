@@ -4,6 +4,7 @@ import { UpdateToDoDto } from './dto/update-to-do.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ToDo } from './entities/to-do.entity';
 import { Repository } from 'typeorm';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class ToDoService {
@@ -19,17 +20,24 @@ export class ToDoService {
       await this.todoRepository.save(toDo);
       return toDo;
     } catch (error) {
+      // TODO: verificar si aparece el error como tratarlo
       console.log(error);
       throw new InternalServerErrorException('Help')
     }
   }
 
-  findAll() {
-    return `This action returns all toDo`;
+  async findAll( todoActive: boolean ) {
+    const toDos = await this.todoRepository.findBy({ isActive: todoActive });
+    return toDos;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} toDo`;
+  async findOne(searchValue: string) {
+    let toDo: ToDo;
+    if ( isUUID(searchValue) ) {
+      toDo = await this.todoRepository.findOneBy({ id: searchValue })
+      return toDo;
+    }
+    return `the task with id #${searchValue} has not been found`;
   }
 
   update(id: number, updateToDoDto: UpdateToDoDto) {

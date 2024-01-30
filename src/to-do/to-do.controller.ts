@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe, Query } from '@nestjs/common';
 import { ToDoService } from './to-do.service';
 import { CreateToDoDto } from './dto/create-to-do.dto';
 import { UpdateToDoDto } from './dto/update-to-do.dto';
@@ -13,13 +13,13 @@ export class ToDoController {
   }
 
   @Get()
-  findAll() {
-    return this.toDoService.findAll();
+  findAll(@Query('todoActive', ParseBoolPipe) todoActive: boolean) {
+    return this.toDoService.findAll(todoActive);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.toDoService.findOne(+id);
+  @Get(':searchValue')
+  findOne(@Param('searchValue') searchValue: string) {
+    return this.toDoService.findOne(searchValue);
   }
 
   @Patch(':id')
