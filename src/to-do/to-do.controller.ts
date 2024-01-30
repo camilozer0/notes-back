@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe, Query, DefaultValuePipe } from '@nestjs/common';
 import { ToDoService } from './to-do.service';
 import { CreateToDoDto } from './dto/create-to-do.dto';
 import { UpdateToDoDto } from './dto/update-to-do.dto';
@@ -12,18 +12,25 @@ export class ToDoController {
   create(@Body() createToDoDto: CreateToDoDto) {
     return this.toDoService.create(createToDoDto);
   }
+  
+  // // Busca los toDos activos o archivados
+  // @Get()
+  // findActive(@Query('todoActive', ParseBoolPipe) todoActive: boolean) {
+  //   return this.toDoService.findActiveTodos(todoActive);
+  // }
+  
+  // // Busca los toDos de hoy o los proximos
+  // @Get('today')
+  // findToday(@Query('todoToday') todoToday: string) {
+  //   return this.toDoService.findTodayTodos(todoToday)
+  // }
 
-  // Busca los toDos activos o archivados
   @Get()
-  findActive(@Query('todoActive', ParseBoolPipe) todoActive: boolean) {
-    return this.toDoService.findActiveTodos(todoActive);
-  }
-
-  // Busca los toDos de hoy o los proximos
-
-  @Get()
-  findToday(@Query('todoToday', ParseBoolPipe) todoToday: boolean) {
-    return this.toDoService.findTodayTodos(todoToday)
+  findToDos(
+    @Query('todoActive', ParseBoolPipe, new DefaultValuePipe(true)) todoActive: boolean,
+    @Query('todoToday', ParseBoolPipe) todoToday: boolean,
+  ) {
+    return this.toDoService.findTodayTodos(todoActive, todoToday)
   }
 
   // Busca un toDo para ser editado o visto

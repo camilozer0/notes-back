@@ -3,9 +3,10 @@ import { CreateToDoDto } from './dto/create-to-do.dto';
 import { UpdateToDoDto } from './dto/update-to-do.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ToDo } from './entities/to-do.entity';
-import { Repository } from 'typeorm';
+import { Equal, LessThan, MoreThan, Repository } from 'typeorm';
 import { isUUID } from 'class-validator';
 import { skip } from 'node:test';
+import { equal } from 'assert';
 
 @Injectable()
 export class ToDoService {
@@ -27,25 +28,52 @@ export class ToDoService {
     }
   }
 
-  async findActiveTodos( todoActive: boolean ) {
-    const toDos = await this.todoRepository.findBy({ isActive: todoActive });
-    return toDos;
-  }
+  // async findActiveTodos( todoActive: boolean ) {
+  //   const toDos = await this.todoRepository.findBy({ isActive: todoActive });
+  //   return toDos;
+  // }
 
-  async findTodayTodos( todoToday: boolean ) {
-    // if ( todoToday ) {
-    //   const toDos = await this.todoRepository.findAndCountBy(
+  // async findTodayTodos( todoToday: string ) {
+  //   return 'esta funcionando  el query'
+  //   const todayDate =  new Date();
+  //   let toDos: ToDo[];
+  //   if ( todoToday ) {
+  //     toDos = await this.todoRepository.find({
+  //       where: {
+  //         dueDate: Equal( todayDate )
+  //       }
+  //     })
+  //   } else {
+  //     toDos = await this.todoRepository.find({
+  //       where: {
+  //         dueDate: LessThan( todayDate )
+  //       }
+  //     })
+  //   }
+  //   return toDos;
+  // }
 
-    //   )
-    //   return toDos;
+  async findTodayTodos( todoActive: boolean, todoToday: boolean) {
+    // let toDos: ToDo[];
+    // if ( todoActive == undefined ) {
+    //   const todayDate = new Date();
+    //   if ( todoToday ) {
+    //     toDos = await this.todoRepository.find({
+    //       where: {
+    //           dueDate: Equal( todayDate )
+    //       }
+    //     })
+    //   } else {
+    //     toDos = await this.todoRepository.find({
+    //       where: {
+    //         dueDate: LessThan( todayDate )
+    //       }
+    //     })
+    //   }
     // } else {
-    //   const toDos =  await this.todoRepository.findAndCountBy(
-
-    //   )
-    //   return toDos;
+    //   toDos = await this.todoRepository.findBy({ isActive: todoActive })
     // }
-    //   return to
-    return 'hello'
+    // return toDos;
   }
 
   async findOne(searchValue: string) {
