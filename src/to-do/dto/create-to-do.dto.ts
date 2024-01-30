@@ -1,4 +1,5 @@
-import { IsArray, IsBoolean, IsBooleanString, IsDate, IsString, MaxLength, MinLength, isDateString } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsArray, IsBoolean, IsBooleanString, IsDate, IsNotEmpty, IsString, MaxLength, MinDate, MinLength, isDateString } from "class-validator";
 
 export class CreateToDoDto {
 
@@ -13,6 +14,9 @@ export class CreateToDoDto {
     description: string;
 
     @IsDate()
+    @IsNotEmpty()
+    @Transform( ({ value }) => new Date(value))
+    @MinDate( new Date())
     dueDate: Date;
 
     @IsBoolean()
@@ -22,6 +26,6 @@ export class CreateToDoDto {
         each: true,
     })
     @IsArray()
-    tags: string;
+    tags: string[];
     
 }

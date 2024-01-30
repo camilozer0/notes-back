@@ -13,8 +13,14 @@ export class ToDoService {
     private readonly todoRepository: Repository<ToDo>,
   ) {}
   
-  create(createToDoDto: CreateToDoDto) {
-    return 'This action adds a new toDo';
+  async create(createToDoDto: CreateToDoDto) {
+    try {
+      const toDo = this.todoRepository.create(createToDoDto);
+      await this.todoRepository.save(toDo);
+      return toDo;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findAll() {

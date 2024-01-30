@@ -13,9 +13,7 @@ export class ToDo {
     @Column('text')
     description: string;
 
-    @CreateDateColumn({
-        update: false,
-    })
+    @CreateDateColumn({ name: 'createdAt' })
     createdAt: Date;
 
     @Column('date')
