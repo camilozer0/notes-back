@@ -34,24 +34,32 @@ export class ToDoService {
     const { todoActive, todoToday } = filtersDto;
     console.log(todoActive, todoToday)
     let toDos: ToDo[];
+    // Si no viene todoActive
     if ( todoActive === undefined ) {
       const todayDate = new Date();
+      const formattedDate = moment(todayDate).format('YYYY-MM-DD');
+      const ultimateDate = moment(formattedDate, 'YYYY-MM-DD').toDate();
+      // Si se buscan los todos del dia
       if ( todoToday ) {
         toDos = await this.todoRepository.find({
           where: {
-              dueDate: Equal( todayDate )
+              dueDate: Equal( formattedDate ),
+              isActive: true
           }
         })
+      // Si se buscan los todos que vienen
       } else {
         toDos = await this.todoRepository.find({
           where: {
-            dueDate: LessThan( todayDate )
+            dueDate: MoreThan( formattedDate ),
+            isActive: true
           }
         })
       }
     } else {
       toDos = await this.todoRepository.findBy({ isActive: todoActive })
     }
+    console.log(toDos[0].dueDate)
     return toDos;
   }
 

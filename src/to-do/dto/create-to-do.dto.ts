@@ -18,7 +18,7 @@ export class CreateToDoDto {
     @IsNotEmpty()
     @Transform( ({ value }) => new Date(value))
     @MinDate( new Date())
-    dueDate: Date;
+    dueDate: string;
 
     @IsBoolean()
     @IsOptional()

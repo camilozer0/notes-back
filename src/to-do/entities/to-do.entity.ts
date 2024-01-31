@@ -14,17 +14,18 @@ export class ToDo {
     @Column('text')
     description: string;
 
-    @Column('date', {
-        transformer: {
-            to(value: Date) {
-                return moment(value).format('YYYY-MM-DD');
-            },
-            from(value: Date) {
-                return moment(value).format('YYYY-MM-DD');
-            },
-        },
-    })
-    dueDate: Date;
+    // @Column('date', {
+    //     transformer: {
+    //         to(value: Date) {
+    //             return moment(value).format('YYYY-MM-DD');
+    //         },
+    //         from(value: Date) {
+    //             return moment(value).format('YYYY-MM-DD');
+    //         },
+    //     },
+    // })
+    @Column( {type: 'date'})
+    dueDate: string;
 
     @Column('bool', {
         default: true
