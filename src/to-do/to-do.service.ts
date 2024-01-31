@@ -1,8 +1,8 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ToDo } from './entities/to-do.entity';
-import { Equal, LessThan, MoreThan, Repository } from 'typeorm';
-import { Equals, isUUID } from 'class-validator';
+import { Equal, EqualOperator, LessThan, MoreThan, Repository } from 'typeorm';
+import { isUUID } from 'class-validator';
 import { CreateToDoDto, UpdateToDoDto, FiltersDto } from './dto';
 import  * as moment  from "moment";
 
@@ -32,15 +32,15 @@ export class ToDoService {
   // Metodo para obtener una nota de acuerdo a algunos filtros
   async findtodosWithFilters( filtersDto: FiltersDto ) {
     const { todoActive, todoToday } = filtersDto;
-    console.log(todoActive, todoToday)
     let toDos: ToDo[];
     // Si no viene todoActive
     if ( todoActive === undefined ) {
       const todayDate = new Date();
       const formattedDate = moment(todayDate).format('YYYY-MM-DD');
-      const ultimateDate = moment(formattedDate, 'YYYY-MM-DD').toDate();
+      console.log(formattedDate)
       // Si se buscan los todos del dia
       if ( todoToday ) {
+        console.log('true today')
         toDos = await this.todoRepository.find({
           where: {
               dueDate: Equal( formattedDate ),
@@ -49,17 +49,20 @@ export class ToDoService {
         })
       // Si se buscan los todos que vienen
       } else {
+        console.log('false today')
         toDos = await this.todoRepository.find({
           where: {
             dueDate: MoreThan( formattedDate ),
             isActive: true
+          },
+          order: {
+            dueDate: "ASC"
           }
         })
       }
     } else {
       toDos = await this.todoRepository.findBy({ isActive: todoActive })
     }
-    console.log(toDos[0].dueDate)
     return toDos;
   }
 
