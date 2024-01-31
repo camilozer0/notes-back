@@ -17,7 +17,8 @@ export class CreateToDoDto {
     @IsDate()
     @IsNotEmpty()
     @Transform( ({ value }) => new Date(value))
-    @MinDate( new Date())
+    // @MinDate( new Date())
+    @MinDate( new Date(new Date().getTime() - 1000*60*60*24 ) )
     dueDate: string;
 
     @IsBoolean()

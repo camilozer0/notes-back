@@ -13,7 +13,7 @@ export class FiltersDto {
     @IsOptional()
     //@IsBoolean()
     //@Type( () => Boolean )
-    @Transform( ({value}) => value )
-    todoToday?: boolean;
+    // @Transform( ({value}) => value )
+    todoToday?: string;
     
 }
