@@ -12,22 +12,9 @@ export class ToDoController {
     return this.toDoService.create(createToDoDto);
   }
   
-  // // Busca los toDos activos o archivados
-  // @Get()
-  // findActive(@Query('todoActive', ParseBoolPipe) todoActive: boolean) {
-  //   return this.toDoService.findActiveTodos(todoActive);
-  // }
-  
-  // // Busca los toDos de hoy o los proximos
-  // @Get('today')
-  // findToday(@Query('todoToday') todoToday: string) {
-  //   return this.toDoService.findTodayTodos(todoToday)
-  // }
-
   @Get()
   findwithFilters(
     @Query() filtersDto: FiltersDto ) {
-      console.log(filtersDto)
     return this.toDoService.findtodosWithFilters(filtersDto)
   }
 

@@ -1,5 +1,6 @@
 import { Transform } from "class-transformer";
 import { IsArray, IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength, MinDate, MinLength, isDateString } from "class-validator";
+import * as moment from "moment";
 
 export class CreateToDoDto {
 

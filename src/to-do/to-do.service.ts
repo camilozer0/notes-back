@@ -2,10 +2,10 @@ import { Injectable, InternalServerErrorException, NotFoundException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { ToDo } from './entities/to-do.entity';
 import { Equal, LessThan, MoreThan, Repository } from 'typeorm';
-import { isUUID } from 'class-validator';
-import { equal } from 'assert';
+import { Equals, isUUID } from 'class-validator';
 import { CreateToDoDto, UpdateToDoDto, FiltersDto } from './dto';
-import { filter } from 'rxjs';
+import  * as moment  from "moment";
+
 
 @Injectable()
 export class ToDoService {
@@ -15,9 +15,11 @@ export class ToDoService {
     private readonly todoRepository: Repository<ToDo>,
   ) {}
   
+  // Metodo para insertar una nueva nota
   async create(createToDoDto: CreateToDoDto) {
     try {
       const toDo = this.todoRepository.create(createToDoDto);
+      //toDo.dueDate = new Date().toISOString().slice(0, 10);
       await this.todoRepository.save(toDo);
       return toDo;
     } catch (error) {
@@ -27,33 +29,10 @@ export class ToDoService {
     }
   }
 
-  // async findActiveTodos( todoActive: boolean ) {
-  //   const toDos = await this.todoRepository.findBy({ isActive: todoActive });
-  //   return toDos;
-  // }
-
-  // async findTodayTodos( todoToday: string ) {
-  //   return 'esta funcionando  el query'
-  //   const todayDate =  new Date();
-  //   let toDos: ToDo[];
-  //   if ( todoToday ) {
-  //     toDos = await this.todoRepository.find({
-  //       where: {
-  //         dueDate: Equal( todayDate )
-  //       }
-  //     })
-  //   } else {
-  //     toDos = await this.todoRepository.find({
-  //       where: {
-  //         dueDate: LessThan( todayDate )
-  //       }
-  //     })
-  //   }
-  //   return toDos;
-  // }
-
+  // Metodo para obtener una nota de acuerdo a algunos filtros
   async findtodosWithFilters( filtersDto: FiltersDto ) {
     const { todoActive, todoToday } = filtersDto;
+    console.log(todoActive, todoToday)
     let toDos: ToDo[];
     if ( todoActive === undefined ) {
       const todayDate = new Date();
@@ -66,23 +45,24 @@ export class ToDoService {
       } else {
         toDos = await this.todoRepository.find({
           where: {
-            dueDate: MoreThan( todayDate )
+            dueDate: LessThan( todayDate )
           }
         })
       }
     } else {
       toDos = await this.todoRepository.findBy({ isActive: todoActive })
     }
-    console.log(todoActive, todoToday)
     return toDos;
   }
 
+  // Metodo para obtener una tarea
   async findOne(searchValue: string) {
     let toDo: ToDo;
     if ( isUUID(searchValue) ) {
       toDo = await this.todoRepository.findOneBy({ id: searchValue })
     }
-    if ( !toDo ) throw new NotFoundException(`The todo wasn't foundks`)
+    if ( !toDo ) throw new NotFoundException(`The todo wasn't found`);
+    console.log(moment(toDo.dueDate).format('YYYY-MM-DD'))
     return toDo;
   }
 
