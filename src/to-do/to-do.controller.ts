@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe, Query, DefaultValuePipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe, Query, DefaultValuePipe, ParseUUIDPipe } from '@nestjs/common';
 import { ToDoService } from './to-do.service';
 import { CreateToDoDto, UpdateToDoDto, FiltersDto } from './dto';
 
@@ -25,12 +25,12 @@ export class ToDoController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateToDoDto: UpdateToDoDto) {
-    return this.toDoService.update(+id, updateToDoDto);
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateToDoDto: UpdateToDoDto) {
+    return this.toDoService.update(id, updateToDoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.toDoService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.toDoService.remove(id);
   }
 }

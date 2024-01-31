@@ -77,11 +77,25 @@ export class ToDoService {
     return toDo;
   }
 
-  update(id: number, updateToDoDto: UpdateToDoDto) {
-    return `This action updates a #${id} toDo`;
+  // Metodo para actualizar una tarea
+  async update(id: string, updateToDoDto: UpdateToDoDto) {
+    const { ...toUpdate } = updateToDoDto
+    const toDo = await this.todoRepository.preload({
+      id: id,
+      ...toUpdate
+    });
+    if ( !toDo ) throw new NotFoundException('No se ha encontrado la tarea');
+    try {
+      this.todoRepository.save(toDo);
+    } catch (error) {
+      throw new InternalServerErrorException('help');
+    }
+    return toDo;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} toDo`;
+  // Metodo para borrar una tarea
+  async remove(id: string) {
+    const toDo =  await this.findOne(id);
+    this.todoRepository.remove(toDo);
   }
 }
