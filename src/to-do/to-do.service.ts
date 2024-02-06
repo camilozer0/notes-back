@@ -38,9 +38,7 @@ export class ToDoService {
       const todayDate = new Date();
       const formattedDate = moment(todayDate).format('YYYY-MM-DD');
       // Si se buscan los todos del dia
-      console.log(todoActive, todoToday)
       if ( todoToday === 'true' ) {
-        console.log(formattedDate, toDos)
         toDos = await this.todoRepository.find({
           where: {
               dueDate: Equal( formattedDate ),
@@ -49,7 +47,6 @@ export class ToDoService {
         })
       // Si se buscan los todos que vienen
       } else {
-        console.log('false today', todoToday)
         toDos = await this.todoRepository.find({
           where: {
             dueDate: MoreThan( formattedDate ),

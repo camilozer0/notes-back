@@ -4,6 +4,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function main() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   const logger = new Logger(
     'App Running'
   )
