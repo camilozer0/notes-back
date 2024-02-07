@@ -33,7 +33,8 @@ export class ToDo {
     isActive: boolean
 
     @Column('text', {
-        array: true
+        array: true,
+        default: []
     })
     tags: string[];
 

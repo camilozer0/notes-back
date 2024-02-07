@@ -76,7 +76,7 @@ export class ToDoService {
 
   // Metodo para actualizar una tarea
   async update(id: string, updateToDoDto: UpdateToDoDto) {
-    const { ...toUpdate } = updateToDoDto
+    const { ...toUpdate } = updateToDoDto;
     const toDo = await this.todoRepository.preload({
       id: id,
       ...toUpdate

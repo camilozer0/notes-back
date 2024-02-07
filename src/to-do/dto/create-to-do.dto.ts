@@ -29,6 +29,7 @@ export class CreateToDoDto {
         each: true,
     })
     @IsArray()
+    @IsOptional()
     tags: string[];
     
 }
