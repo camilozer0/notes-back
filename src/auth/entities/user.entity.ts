@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { MinLength, Min } from 'class-validator';
 
-@Entity('users')
+@Entity('Users')
 export class User {
 
     @PrimaryGeneratedColumn('uuid')

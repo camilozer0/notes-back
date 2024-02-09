@@ -1,7 +1,7 @@
 import * as moment from "moment";
 import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'todo'})
+@Entity('Todos')
 export class ToDo {
 
     @PrimaryGeneratedColumn('uuid')
