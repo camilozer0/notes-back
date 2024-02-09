@@ -1,6 +1,5 @@
 import * as moment from "moment";
 import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { IsDate } from 'class-validator';
 
 @Entity({ name: 'todo'})
 export class ToDo {

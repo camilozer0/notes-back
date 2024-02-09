@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ToDo } from './to-do/entities/to-do.entity';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
+import { User } from './auth/entities/user.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { AuthModule } from './auth/auth.module';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
-      entities: [ToDo]
+      entities: [ToDo, User]
     }),
     ToDoModule,
     CommonModule,
