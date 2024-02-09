@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ToDo } from './to-do/entities/to-do.entity';
 import { CommonModule } from './common/common.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CommonModule } from './common/common.module';
     }),
     ToDoModule,
     CommonModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
