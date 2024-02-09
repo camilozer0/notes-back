@@ -4,7 +4,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { hash, hashSync } from 'bcrypt';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +22,8 @@ export class AuthService {
         ...userData,
         password: hashP
       });
-      await this.userRepository.save( user )
+      await this.userRepository.save( user );
+      delete user.password;
       return user;
     } catch (error) {
       this.handleDbError(error)
