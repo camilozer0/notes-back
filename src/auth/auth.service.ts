@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +14,8 @@ export class AuthService {
     // Iyecto el repositorio y lo uso con la entidad usuario
     // Esta es la capa de persistencia, conexion con la base de datos
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService
   ){}
 
   async signup(signupUserDto: SignupUserDto) {
@@ -30,8 +33,10 @@ export class AuthService {
       // Borro el password del usuario que guarde en la base de datos.
       delete user.password;
       // Devuelvo el usuario al frontend
-      return user;
-      // TODO retornar el JWT
+      return {
+        ...user, 
+        token: this.getJwt({ id: user.id, email: user.email  })
+      }
     } catch (error) {
       this.handleDbError(error)
     } 
@@ -46,14 +51,22 @@ export class AuthService {
         email: email
       }, select: {
         // Solo recibo esta informacion del usuario
-        email: true, password: true
+        email: true, password: true, id: true
       }
     });
     // Verifico que el usuario existe y que la contrasena sea igual
     if ( !user || !bcrypt.compareSync( password, user.password ))
       throw new UnauthorizedException('Credenciales no validas');
-    return user;
-    // TODO retornar el JWT
+    return {
+      ...user, 
+      token: this.getJwt({ id: user.id, email: user.email  })
+    }
+  }
+
+  // Para generar el token
+  private getJwt( payload: JwtPayload) {
+    const token = this.jwtService.sign( payload );
+    return token;
   }
 
   handleDbError(error: any) {

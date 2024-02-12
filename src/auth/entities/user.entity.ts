@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { MinLength, Min } from 'class-validator';
 
 @Entity('Users')
@@ -21,6 +21,16 @@ export class User {
     @Column('text', {
         select: false
     })
-    password: string
+    password: string;
+
+    @BeforeInsert()
+    lowercaseEmail() {
+        this.email = this.email.toLowerCase().trim();
+    }
+
+    @BeforeUpdate()
+    checkBeforeUpdate() {
+        this.lowercaseEmail();
+    }
 
 }
