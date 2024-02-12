@@ -41,6 +41,7 @@ export class AuthService {
     });
     if ( !user || !bcrypt.compareSync( password, user.password ))
       throw new UnauthorizedException('Credenciales no validas');
+    return user;
   }
 
   handleDbError(error: any) {
