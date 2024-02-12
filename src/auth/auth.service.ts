@@ -9,6 +9,8 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
 
   constructor(
+    // Iyecto el repositorio y lo uso con la entidad usuario
+    // Esta es la capa de persistencia, conexion con la base de datos
     @InjectRepository(User)
     private readonly userRepository: Repository<User>
   ){}
@@ -16,32 +18,42 @@ export class AuthService {
   async signup(signupUserDto: SignupUserDto) {
     try {
       const { password, ...userData } = signupUserDto;
+      // Encripto el password antes de enviarlo a la base de datos
       const hashP = await bcrypt.hash( password, 9 );
+      // Hago la creacion del usuario
       const user = this.userRepository.create({
         ...userData,
         password: hashP
       });
+      // Salvo el usuario en la base de datos
       await this.userRepository.save( user );
+      // Borro el password del usuario que guarde en la base de datos.
       delete user.password;
+      // Devuelvo el usuario al frontend
       return user;
+      // TODO retornar el JWT
     } catch (error) {
       this.handleDbError(error)
     } 
   }
 
   async login(loginUserDto: LoginUserDto) {
+    // Hago la extraccion del email y el password para usarlos
     const { email, password } = loginUserDto;
     // Uso este metodo que me permite activar solo algunos valores del usuario
     const user = await this.userRepository.findOne({
       where: {
         email: email
       }, select: {
-        email: true, password: true, id: true
+        // Solo recibo esta informacion del usuario
+        email: true, password: true
       }
     });
+    // Verifico que el usuario existe y que la contrasena sea igual
     if ( !user || !bcrypt.compareSync( password, user.password ))
       throw new UnauthorizedException('Credenciales no validas');
     return user;
+    // TODO retornar el JWT
   }
 
   handleDbError(error: any) {
