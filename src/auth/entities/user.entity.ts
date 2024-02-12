@@ -15,7 +15,10 @@ export class User {
     })
     email: string;
 
-    @Column('text')
+    // Con la opcion select en false, me aseguro que nunca retorne el password en las request
+    @Column('text', {
+        select: false
+    })
     password: string
 
 }

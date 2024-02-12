@@ -1,10 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { SignupUserDto } from './dto';
-import { LoginUserDto } from './dto/login-user.dto';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { SignupUserDto, LoginUserDto } from './dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { hash } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +16,7 @@ export class AuthService {
   async signup(signupUserDto: SignupUserDto) {
     try {
       const { password, ...userData } = signupUserDto;
-      const hashP = await hash( password, 9 );
+      const hashP = await bcrypt.hash( password, 9 );
       const user = this.userRepository.create({
         ...userData,
         password: hashP
@@ -30,8 +29,18 @@ export class AuthService {
     } 
   }
 
-  login(loginUserDto: LoginUserDto) {
-    return 'This action adds a new auth';
+  async login(loginUserDto: LoginUserDto) {
+    const { email, password } = loginUserDto;
+    // Uso este metodo que me permite activar solo algunos valores del usuario
+    const user = await this.userRepository.findOne({
+      where: {
+        email: email
+      }, select: {
+        email: true, password: true, id: true
+      }
+    });
+    if ( !user || !bcrypt.compareSync( password, user.password ))
+      throw new UnauthorizedException('Credenciales no validas');
   }
 
   handleDbError(error: any) {
