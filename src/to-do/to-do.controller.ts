@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe, Query, DefaultValuePipe, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseBoolPipe, Query, DefaultValuePipe, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { ToDoService } from './to-do.service';
 import { CreateToDoDto, UpdateToDoDto, FiltersDto } from './dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('todo')
 export class ToDoController {
   constructor(private readonly toDoService: ToDoService) {}
 
   // Crea un toDo
+  @UseGuards( AuthGuard() )
   @Post()
   create(@Body() createToDoDto: CreateToDoDto) {
     return this.toDoService.create(createToDoDto);
@@ -29,6 +31,7 @@ export class ToDoController {
     return this.toDoService.update(id, updateToDoDto);
   }
 
+  @UseGuards( AuthGuard() )
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.toDoService.remove(id);
