@@ -51,15 +51,16 @@ export class AuthService {
         email: email
       }, select: {
         // Solo recibo esta informacion del usuario
-        email: true, password: true, id: true
+        email: true, password: true, fullName: true, id: true
       }
     });
     // Verifico que el usuario existe y que la contrasena sea igual
     if ( !user || !bcrypt.compareSync( password, user.password ))
       throw new UnauthorizedException('Credenciales no validas');
+    delete user.password;
     return {
-      ...user, 
-      token: this.getJwt({ id: user.id, email: user.email  })
+    ...user, 
+    token: this.getJwt({ id: user.id, email: user.email  })
     }
   }
 
